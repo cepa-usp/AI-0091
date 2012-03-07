@@ -1,0 +1,3 @@
+h1. Funções logarítmicas
+
+Objeto de aprendizagem destinado ao treinamento da relação de funções logarítmicas e seus gráficos.
