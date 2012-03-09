@@ -29,8 +29,8 @@ package
 		
 		public function JanelaGrafico() 
 		{
-			//this.x = 20;
-			this.y = 35;
+			this.x = 10;
+			this.y = 10;
 			
 			initFuncoes();
 			
@@ -50,16 +50,17 @@ package
 		{
 			var xMin:Number = -Math.PI*2;
 			var xMax:Number = Math.PI*2;
-			var largura:Number = 700;
+			var largura:Number = 680;
 			var yMin:Number = -3;
 			var yMax:Number = 3;
 			var altura:Number = 340;
 			
 			graph = new SimpleGraph(xMin, xMax, largura, yMin, yMax, altura);
-			graph.setTicksDistance(SimpleGraph.AXIS_X, 1);
-			graph.setSubticksDistance(SimpleGraph.AXIS_X, 0.2);
-			graph.setTicksDistance(SimpleGraph.AXIS_Y, 1);
-			graph.setSubticksDistance(SimpleGraph.AXIS_Y, 0.2);
+			graph.setTicksDistance(SimpleGraph.AXIS_X, 2);
+			graph.setTicksDistance(SimpleGraph.AXIS_Y, 2);
+			graph.setSubticksDistance(SimpleGraph.AXIS_X, 1);
+			graph.setSubticksDistance(SimpleGraph.AXIS_Y, 1);
+			graph.grid = false;
 			
 			//graph.x = 29;
 			//graph.y = 1;

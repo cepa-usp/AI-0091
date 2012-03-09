@@ -5,6 +5,7 @@ package
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.external.ExternalInterface;
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -62,16 +63,18 @@ package
 			initGrafico();
 			addListeners();
 			
-			new_BTN.visible = false;
-			ok_BTN.visible = true;
-			
-			botoes.resetButton.mouseEnabled = false;
-			botoes.resetButton.filters = [GRAYSCALE_FILTER];
-			botoes.resetButton.alpha = 0.5;
+			//new_BTN.visible = false;
+			//ok_BTN.visible = true;
+			//
+			//botoes.resetButton.mouseEnabled = false;
+			//botoes.resetButton.filters = [GRAYSCALE_FILTER];
+			//botoes.resetButton.alpha = 0.5;
 			
 			stage.focus = inputAnswer;
 			
-			initLMSConnection();
+			iniciaTutorial();
+			
+			if(ExternalInterface.available) initLMSConnection();
 		}
 		
 		private function initGrafico():void
@@ -80,6 +83,7 @@ package
 			addChild(grafico);
 			
 			setChildIndex(grafico, 0);
+			setChildIndex(fundoGrafco, 0);
 		}
 		
 		private function addListeners():void
@@ -124,16 +128,16 @@ package
 			var resetTT:ToolTip = new ToolTip(botoes.resetButton, "Reiniciar", 12, 0.8, 100, 0.6, 0.1);
 			var intTT:ToolTip = new ToolTip(botoes.tutorialBtn, "Reiniciar tutorial", 12, 0.8, 150, 0.6, 0.1);
 			
-			var finalizaTT:ToolTip = new ToolTip(ok_BTN, "Responder", 12, 0.8, 200, 0.6, 0.1);
-			var newTT:ToolTip = new ToolTip(new_BTN, "Reiniciar", 12, 0.8, 250, 0.6, 0.1);
+			//var finalizaTT:ToolTip = new ToolTip(ok_BTN, "Responder", 12, 0.8, 200, 0.6, 0.1);
+			//var newTT:ToolTip = new ToolTip(new_BTN, "Reiniciar", 12, 0.8, 250, 0.6, 0.1);
 			
 			addChild(infoTT);
 			addChild(instTT);
 			addChild(resetTT);
 			addChild(intTT);
 			
-			addChild(finalizaTT);
-			addChild(newTT);
+			//addChild(finalizaTT);
+			//addChild(newTT);
 		}
 		
 		private function nextExercise(e:MouseEvent):void 
@@ -141,12 +145,12 @@ package
 			grafico.addGraphFunction();
 			inputAnswer.text = "";
 			inputAnswer.mouseEnabled = true;
-			new_BTN.visible = false;
-			ok_BTN.visible = true;
-			
-			botoes.resetButton.mouseEnabled = false;
-			botoes.resetButton.filters = [GRAYSCALE_FILTER];
-			botoes.resetButton.alpha = 0.5;
+			//new_BTN.visible = false;
+			//ok_BTN.visible = true;
+			//
+			//botoes.resetButton.mouseEnabled = false;
+			//botoes.resetButton.filters = [GRAYSCALE_FILTER];
+			//botoes.resetButton.alpha = 0.5;
 			
 			stage.focus = inputAnswer;
 		}
@@ -159,24 +163,26 @@ package
 			if (inputAnswer.text != "") {
 				if (levenshteinDistance(respostaDigitada ,grafico.funcaoAtual) <= 1) {
 					trace("acertou");
-					feedbackScreen.setText("Parabéns!\nVocê acertou a função.");
+					feedbackScreen.setText("Parabéns!\nVocê acertou.");
 				}else {
 					trace("errou");
-					feedbackScreen.setText("Veja o gráfico novamente e reveja sua resposta.");
+					feedbackScreen.setText("Analise melhor o gráfico.");
 				}
 				
-				lastScore = 100;
-				completed = true
-				save2LMS();
+				if(!completed){
+					lastScore = 100;
+					completed = true
+					save2LMS();
+				}
 				
 				new_BTN.visible = true;
-				ok_BTN.visible = false;
+				//ok_BTN.visible = false;
 				
-				TextField(inputAnswer).mouseEnabled = false;
+				//TextField(inputAnswer).mouseEnabled = false;
 				
-				botoes.resetButton.mouseEnabled = true;
-				botoes.resetButton.filters = [];
-				botoes.resetButton.alpha = 1;
+				//botoes.resetButton.mouseEnabled = true;
+				//botoes.resetButton.filters = [];
+				//botoes.resetButton.alpha = 1;
 			}
 			else
 			{
@@ -189,43 +195,35 @@ package
 		}
 		
 		
-		//------------------------- Tutorial -----------------------------//
-		
-		
+		//Tutorial
 		private var balao:CaixaTexto;
 		private var pointsTuto:Array;
 		private var tutoBaloonPos:Array;
 		private var tutoPos:int;
-		private var tutoSequence:Array = ["Estas placas de Petri contém três espécies distintas de bactérias.", 
-										  "Classifique as bactérias arrastando os rótulos para as placas de Petri.",
-										  "O tubo de ensaio contém um líquido propício à proliferação das três bactérias.",
-										  "Esta escala indica a distribuição de oxigênio no tubo de ensaio: quanto mais verde, mais oxigênio há naquela altura do tubo.",
-										  "Você pode arrastar uma ou mais bactérias para dentro do tubo de ensaio.",
-										  "Pressione este botão para trocar o tubo de ensaio e começar uma nova experiência."];
-		
+		//private var tutoPhaseFinal:Boolean;
+		private var tutoSequence:Array = ["Este é o gráfico de uma função trigonométrica, escolhida aleatoriamente.",
+										  "Escreva aqui o NOME da função trigonométrica apresentada e pressione \"ok\" para verificar.",
+										  "Você pode fazer quantos exercícios quiser. Pressione \"Novo exercício\" para isso."];
+										  
 		private function iniciaTutorial(e:MouseEvent = null):void 
 		{
 			tutoPos = 0;
+			//tutoPhaseFinal = false;
 			if(balao == null){
 				balao = new CaixaTexto(true);
 				addChild(balao);
 				balao.visible = false;
 				
-				pointsTuto = 	[new Point(),
-								new Point(),
-								new Point(),
-								new Point(),
-								new Point(),
-								new Point()];
+				pointsTuto = 	[new Point(400, 190),
+								new Point(inputAnswer.x + inputAnswer.width / 2, inputAnswer.y),
+								new Point(new_BTN.x, new_BTN.y - new_BTN.height / 2)];
 								
-				tutoBaloonPos = [[CaixaTexto.BOTTON, CaixaTexto.CENTER],
-								[CaixaTexto.TOP, CaixaTexto.CENTER],
-								[CaixaTexto.LEFT, CaixaTexto.FIRST],
-								[CaixaTexto.LEFT, CaixaTexto.CENTER],
-								[CaixaTexto.BOTTON, CaixaTexto.CENTER],
-								[CaixaTexto.LEFT, CaixaTexto.LAST]];
+				tutoBaloonPos = [[CaixaTexto.TOP, CaixaTexto.LAST],
+								[CaixaTexto.BOTTON, CaixaTexto.FIRST],
+								[CaixaTexto.BOTTON, CaixaTexto.FIRST]];
 			}
 			balao.removeEventListener(Event.CLOSE, closeBalao);
+			//feedbackScreen.removeEventListener(Event.CLOSE, iniciaTutorialSegundaFase);
 			
 			balao.setText(tutoSequence[tutoPos], tutoBaloonPos[tutoPos][0], tutoBaloonPos[tutoPos][1]);
 			balao.setPosition(pointsTuto[tutoPos].x, pointsTuto[tutoPos].y);
@@ -235,16 +233,32 @@ package
 		
 		private function closeBalao(e:Event):void 
 		{
-			tutoPos++;
-			if (tutoPos >= tutoSequence.length) {
+			/*if (tutoPhaseFinal) {
 				balao.removeEventListener(Event.CLOSE, closeBalao);
 				balao.visible = false;
-				//tutoPhase = false;
-			}else {
-				balao.setText(tutoSequence[tutoPos], tutoBaloonPos[tutoPos][0], tutoBaloonPos[tutoPos][1]);
-				balao.setPosition(pointsTuto[tutoPos].x, pointsTuto[tutoPos].y);
-			}
+				//feedbackScreen.removeEventListener(Event.CLOSE, iniciaTutorialSegundaFase);
+			}else{*/
+				tutoPos++;
+				if (tutoPos >= tutoSequence.length) {
+					balao.removeEventListener(Event.CLOSE, closeBalao);
+					balao.visible = false;
+					//feedbackScreen.addEventListener(Event.CLOSE, iniciaTutorialSegundaFase);
+					//tutoPhaseFinal = true;
+				}else {
+					balao.setText(tutoSequence[tutoPos], tutoBaloonPos[tutoPos][0], tutoBaloonPos[tutoPos][1]);
+					balao.setPosition(pointsTuto[tutoPos].x, pointsTuto[tutoPos].y);
+				}
+			//}
 		}
+		
+		//private function iniciaTutorialSegundaFase(e:Event):void 
+		//{
+			//if(tutoPhaseFinal){
+				//balao.setText("Você pode fazer quantos exercícios quiser. Pressione \"Novo exercício\" para isso.", CaixaTexto.BOTTON, CaixaTexto.FIRST);
+				//balao.setPosition(new_BTN.x, new_BTN.y - new_BTN.height / 2);
+				//tutoPhaseFinal = false;
+			//}
+		//}
 		
 		
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
