@@ -215,12 +215,12 @@ package
 				balao.visible = false;
 				
 				pointsTuto = 	[new Point(400, 190),
-								new Point(inputAnswer.x + inputAnswer.width / 2, inputAnswer.y),
-								new Point(new_BTN.x, new_BTN.y - new_BTN.height / 2)];
+								new Point(inputAnswer.x + inputAnswer.width / 2, inputAnswer.y + inputAnswer.height),
+								new Point(new_BTN.x, new_BTN.y + new_BTN.height / 2)];
 								
 				tutoBaloonPos = [[CaixaTexto.TOP, CaixaTexto.LAST],
-								[CaixaTexto.BOTTON, CaixaTexto.FIRST],
-								[CaixaTexto.BOTTON, CaixaTexto.FIRST]];
+								[CaixaTexto.TOP, CaixaTexto.FIRST],
+								[CaixaTexto.TOP, CaixaTexto.FIRST]];
 			}
 			balao.removeEventListener(Event.CLOSE, closeBalao);
 			//feedbackScreen.removeEventListener(Event.CLOSE, iniciaTutorialSegundaFase);
