@@ -53,7 +53,7 @@ package
 			var largura:Number = 680;
 			var yMin:Number = -3;
 			var yMax:Number = 3;
-			var altura:Number = 340;
+			var altura:Number = 370;
 			
 			graph = new SimpleGraph(xMin, xMax, largura, yMin, yMax, altura);
 			graph.setTicksDistance(SimpleGraph.AXIS_X, 2);
