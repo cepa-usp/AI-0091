@@ -83,7 +83,7 @@ package
 			addChild(grafico);
 			
 			setChildIndex(grafico, 0);
-			setChildIndex(fundoGrafco, 0);
+			//setChildIndex(fundoGrafco, 0);
 		}
 		
 		private function addListeners():void
