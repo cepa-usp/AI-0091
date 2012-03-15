@@ -128,7 +128,7 @@ package
 			var resetTT:ToolTip = new ToolTip(botoes.resetButton, "Reiniciar", 12, 0.8, 100, 0.6, 0.1);
 			var intTT:ToolTip = new ToolTip(botoes.tutorialBtn, "Reiniciar tutorial", 12, 0.8, 150, 0.6, 0.1);
 			
-			//var finalizaTT:ToolTip = new ToolTip(ok_BTN, "Responder", 12, 0.8, 200, 0.6, 0.1);
+			var finalizaTT:ToolTip = new ToolTip(ok_BTN, "Verificar resposta", 12, 0.8, 200, 0.6, 0.1);
 			//var newTT:ToolTip = new ToolTip(new_BTN, "Reiniciar", 12, 0.8, 250, 0.6, 0.1);
 			
 			addChild(infoTT);
@@ -136,7 +136,7 @@ package
 			addChild(resetTT);
 			addChild(intTT);
 			
-			//addChild(finalizaTT);
+			addChild(finalizaTT);
 			//addChild(newTT);
 		}
 		
