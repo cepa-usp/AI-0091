@@ -16,11 +16,6 @@
       // Define a versão SCORM (2004). Também pode ser feito via ActionScript, através da classe ExternalInterface.
       scorm.version = "2004";
       
-      // Caso ainda esteja conectado ao LMS, desconecta.
-      $(window).unload(function(){
-        if (scorm.connection.isActive) scorm.quit();
-      });
-		
   		$(document).ready(function(){
         swfobject.embedSWF("swf/AI_Loader.swf", "ai-container", flashvars.width, flashvars.height, "10.0.0", "expressInstall.swf", flashvars, params, attributes);
       });
